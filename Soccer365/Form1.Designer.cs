@@ -49,7 +49,6 @@
             this.cmB_years_game.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmB_years_game.FormattingEnabled = true;
             this.cmB_years_game.Items.AddRange(new object[] {
-            "2022/2023",
             "2021/2022",
             "2020/2021",
             "2019/2020",
@@ -74,7 +73,6 @@
             this.Text = "Парсер";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
