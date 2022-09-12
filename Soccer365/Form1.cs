@@ -70,10 +70,9 @@ namespace Soccer365
                         sw.WriteLine(note);
 
                         foreach (var pair in _dict)
-                        {
+                        {               
                             sw.Write($"{pair.Value} = {pair.Key}");    
                         }
-
                         MessageBox.Show("Файл успешно сохранен");
                     }
                 }
