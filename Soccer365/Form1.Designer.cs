@@ -70,8 +70,7 @@
             this.cmB_name_game.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmB_name_game.FormattingEnabled = true;
             this.cmB_name_game.Items.AddRange(new object[] {
-            "464",
-            "477"});
+            "453"});
             this.cmB_name_game.Location = new System.Drawing.Point(360, 24);
             this.cmB_name_game.Name = "cmB_name_game";
             this.cmB_name_game.Size = new System.Drawing.Size(122, 21);

@@ -21,12 +21,12 @@ namespace Soccer365
             InitializeComponent();
         }
 
-       async void Btn_Soccer365_Click(object sender, EventArgs e)
+        void Btn_Soccer365_Click(object sender, EventArgs e)
         {
 
             IWebDriver driver = new ChromeDriver();
             var z = 0;
-            
+
             while (z < cmB_name_game.Items.Count)
             {
                 driver.Url = $@"https://soccer365.ru/competitions/{cmB_name_game.Text}/";
@@ -36,13 +36,12 @@ namespace Soccer365
                 cmB_years_game.SelectedIndex = 0;
                 while (i < cmB_years_game.Items.Count)
                 {
-                    LoopEnd:
                     Setting.GetInstance.CheckingFileAvailability(cmB_years_game.Text);
 
                     try
                     {
                         driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd}')]")).Click();
-                        await Task.Delay(1000);
+
                         driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game.Text}')]")).Click();
                         cmd = cmB_years_game.Text;
 
@@ -51,7 +50,6 @@ namespace Soccer365
                     {
                         if (i < cmB_years_game.Items.Count - 1) cmB_years_game.SelectedIndex = i + 1;
                         i++;
-                        goto LoopEnd;
                     }
 
 
@@ -91,7 +89,7 @@ namespace Soccer365
                     i++;
                 }
 
-            
+
 
 
                 if (z < cmB_name_game.Items.Count - 1) cmB_name_game.SelectedIndex = z + 1;
@@ -106,4 +104,5 @@ namespace Soccer365
             cmB_name_game.SelectedIndex = 0;
         }
     }
+
 }
