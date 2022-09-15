@@ -23,78 +23,88 @@ namespace Soccer365
 
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
+            //var o = 12;
+            var o = 200;
 
             IWebDriver driver = new ChromeDriver();
-            var z = 0;
 
-            while (z < cmB_name_game.Items.Count)
+            while (o < 700)
             {
-                driver.Url = $@"https://soccer365.ru/competitions/{cmB_name_game.Text}/";
+                if (o == 19) o=418;
 
-                var cmd = "2022/2023";
-                var i = 0;
-                cmB_years_game.SelectedIndex = 0;
-                while (i < cmB_years_game.Items.Count)
+                try
                 {
-                    Setting.GetInstance.CheckingFileAvailability(cmB_years_game.Text);
+                    driver.Url = $@"https://soccer365.ru/competitions/{o}/";
 
-                    try
+                    var cmd = "2022/2023";
+                    var i = 0;
+                    cmB_years_game.SelectedIndex = 0;
+
+                    while (i < cmB_years_game.Items.Count)
                     {
-                        driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd}')]")).Click();
+                        Setting.GetInstance.CheckingFileAvailability(cmB_years_game.Text);
 
-                        driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game.Text}')]")).Click();
-                        cmd = cmB_years_game.Text;
+                        try
+                        {
+                            driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd}')]")).Click();
 
-                    }
-                    catch
-                    {
+                            driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game.Text}')]")).Click();
+                            cmd = cmB_years_game.Text;
+
+                        }
+                        catch
+                        {
+                            if (i < cmB_years_game.Items.Count - 1) cmB_years_game.SelectedIndex = i + 1;
+                            i++;
+                            continue;
+                        }
+
+
+                        int game = 1;
+                        int defeats = 4;
+                        int scored = 5;
+                        int conceded = 6;
+
+                        try
+                        {
+                            for (int y = 2; y < 21; y++)
+                            {
+                                var Team = $"{driver.FindElement(By.XPath($"(//a[@rel='nofollow'])[{y}]")).GetAttribute("textContent")}\r\n";// Записываем команду
+
+                                string playGame = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{game}]")).GetAttribute("textContent")}\r\n";
+
+                                string playDefeats = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{defeats}]")).GetAttribute("textContent")}\r\n";
+
+                                string goalsScored = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{scored}]")).GetAttribute("textContent")}\r\n";
+
+                                string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
+
+                                Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
+                                team.PrintTeam(cmB_years_game.Text);
+                                game += 8;
+                                defeats += 8;
+                                scored += 8;
+                                conceded += 8;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
                         if (i < cmB_years_game.Items.Count - 1) cmB_years_game.SelectedIndex = i + 1;
                         i++;
                     }
-
-
-                    int game = 1;
-                    int defeats = 4;
-                    int scored = 5;
-                    int conceded = 6;
-
-                    try
-                    {
-                        for (int y = 2; y < 20; y++)
-                        {
-                            var Team = $"{driver.FindElement(By.XPath($"(//a[@rel='nofollow'])[{y}]")).GetAttribute("textContent")}\r\n";// Записываем команду
-
-                            string playGame = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{game}]")).GetAttribute("textContent")}\r\n";
-
-                            string playDefeats = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{defeats}]")).GetAttribute("textContent")}\r\n";
-
-                            string goalsScored = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{scored}]")).GetAttribute("textContent")}\r\n";
-
-                            string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
-
-                            Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
-                            team.PrintTeam(cmB_years_game.Text);
-                            game += 8;
-                            defeats += 8;
-                            scored += 8;
-                            conceded += 8;
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-
-                    if (i < cmB_years_game.Items.Count - 1) cmB_years_game.SelectedIndex = i + 1;
-                    i++;
                 }
-
-
-
-
-                if (z < cmB_name_game.Items.Count - 1) cmB_name_game.SelectedIndex = z + 1;
-                z++;
+                catch
+                {
+                    o++;
+                    continue;
+                }
+                o++;
             }
+
+
 
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -102,6 +112,19 @@ namespace Soccer365
             cmB_years_game.SelectedIndex = 0;
             cmB_years_game_catch.SelectedIndex = 0;
             cmB_name_game.SelectedIndex = 0;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            IWebDriver driver = new ChromeDriver();
+            driver.Url = $@"https://soccer365.ru/online/";
+            driver.FindElement(By.XPath($"//span[@class='tabs_item js'][contains(.,'Все игры')]")).Click();
+
+            while (true)
+            {
+                var TeamPlay1 = $"{driver.FindElement(By.XPath($"(//div[@class='ht'])[1]")).GetAttribute("textContent")}\r\n";
+                var TeamPlay2 = $"{driver.FindElement(By.XPath($"(//div[@class='at'])[1]")).GetAttribute("textContent")}\r\n";
+            }
         }
     }
 

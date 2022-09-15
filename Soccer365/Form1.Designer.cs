@@ -32,11 +32,12 @@
             this.cmB_years_game = new System.Windows.Forms.ComboBox();
             this.cmB_name_game = new System.Windows.Forms.ComboBox();
             this.cmB_years_game_catch = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Soccer365
             // 
-            this.btn_Soccer365.Location = new System.Drawing.Point(149, 144);
+            this.btn_Soccer365.Location = new System.Drawing.Point(166, 71);
             this.btn_Soccer365.Name = "btn_Soccer365";
             this.btn_Soccer365.Size = new System.Drawing.Size(201, 84);
             this.btn_Soccer365.TabIndex = 0;
@@ -70,7 +71,8 @@
             this.cmB_name_game.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmB_name_game.FormattingEnabled = true;
             this.cmB_name_game.Items.AddRange(new object[] {
-            "453"});
+            "464",
+            "12"});
             this.cmB_name_game.Location = new System.Drawing.Point(360, 24);
             this.cmB_name_game.Name = "cmB_name_game";
             this.cmB_name_game.Size = new System.Drawing.Size(122, 21);
@@ -95,12 +97,23 @@
             this.cmB_years_game_catch.Size = new System.Drawing.Size(122, 21);
             this.cmB_years_game_catch.TabIndex = 5;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(239, 209);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 36);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "2";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(494, 256);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.cmB_years_game_catch);
             this.Controls.Add(this.cmB_name_game);
             this.Controls.Add(this.cmB_years_game);
@@ -118,6 +131,7 @@
         private System.Windows.Forms.ComboBox cmB_years_game;
         private System.Windows.Forms.ComboBox cmB_name_game;
         private System.Windows.Forms.ComboBox cmB_years_game_catch;
+        private System.Windows.Forms.Button button1;
     }
 }
 
