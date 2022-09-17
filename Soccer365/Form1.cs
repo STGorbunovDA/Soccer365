@@ -25,10 +25,10 @@ namespace Soccer365
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SearchInTxt("Команда");
+            SearchInTxt();
         }
 
-        private void SearchInTxt(string keyWord)
+        private void SearchInTxt()
         {
             OpenFileDialog openFile = new OpenFileDialog();
 
@@ -43,29 +43,71 @@ namespace Soccer365
                 string filename = openFile.FileName;
                 string str = File.ReadAllText(filename);
 
-                var kek = str.Split(new Char[] { ':', ',','\n' }).ToList();
 
-                foreach (string s in kek)
+                int counter = 0;
+
+                var sSearch = "";
+                var i = 0;
+                var countSearchSlovo = 1;//для поиска по ключевому слову команды
+
+                var kek = str.Split(new Char[] { ':', ',', '\n' }).ToList();
+
+                while (i < kek.Count)
                 {
-                    if (s.Trim() != "" && Regex.IsMatch(s, keyWord))
+                    string keyWord = $"Команда{countSearchSlovo}";
+
+                    foreach (string s in kek)
                     {
-                        var text = kek[kek.IndexOf(keyWord) + 1] + " " + kek[kek.IndexOf(keyWord) + 3];
-                        break;
+                        if (s.Trim() != "" && Regex.IsMatch(s, keyWord))
+                        {
+                            sSearch = kek[kek.IndexOf(keyWord) + 1];
+                            break;
+                        }
                     }
+                    if (sSearch != "")
+                    {
+                        foreach (var word in kek)
+                        {
+                            if (sSearch == word)
+                                counter++;
+                        }
+
+                        if (counter > 4)
+                        {
+                            if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\"))
+                            {
+                                Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\");
+                            }
+
+                            var fileName = $"C:\\Soccer\\КомандаТочно\\команды.txt";
+                            using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                            {
+                                sw.Write($"Команда: {sSearch}\n");
+                            }
+
+                        }
+                        countSearchSlovo++;
+                        counter = 0;
+                        i++;
+                        sSearch = "";
+                    }
+                    else break;
                 }
+                MessageBox.Show("Готовченко");
+
             }
 
-               
+
         }
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
             int o = 12;
-            
+            int colTeam = 1;
             IWebDriver driver = new ChromeDriver();
 
             while (o < 800)
             {
-                if (o == 19) o=418;
+                if (o == 19) o = 418;
 
                 try
                 {
@@ -81,7 +123,7 @@ namespace Soccer365
 
                         try
                         {
-                            
+
                             driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd}')]")).Click();
 
                             driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game.Text}')]")).Click();
@@ -116,7 +158,16 @@ namespace Soccer365
                                 string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
 
                                 Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
-                                team.PrintTeam(cmB_years_game.Text);
+
+                                if (team.PercentWin > 80)
+                                {
+                                    var fileName = $"C:\\Soccer\\Команды.txt";
+                                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                                    {
+                                        sw.Write($"Команда{colTeam}: {team.Name.Trim()},\nПроцент побед: {team.PercentWin},\nЗабивают за матч: {team.GoalsScoredPlay},\nПропускают за матч: {team.GoalsСoncededPlay}\n-------------------\n");
+                                    }
+                                    colTeam++;
+                                }
                                 game += 8;
                                 defeats += 8;
                                 scored += 8;
@@ -138,18 +189,19 @@ namespace Soccer365
                     continue;
                 }
                 o++;
-            }     
+
+            }
 
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             cmB_years_game.SelectedIndex = 0;
             cmB_years_game_catch.SelectedIndex = 0;
-            cmB_name_game.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int colTeam = 0;
             int k = 12;
             IWebDriver driver = new ChromeDriver();
 
@@ -206,7 +258,15 @@ namespace Soccer365
                                 string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
 
                                 Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
-                                team.PrintTeam(cmB_years_game_catch.Text);
+                                if (team.PercentWin > 80)
+                                {
+                                    var fileName = $"C:\\Soccer\\Команды.txt";
+                                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                                    {
+                                        sw.Write($"Команда{colTeam}: {team.Name.Trim()},\nПроцент побед: {team.PercentWin},\nЗабивают за матч: {team.GoalsScoredPlay},\nПропускают за матч: {team.GoalsСoncededPlay}\n-------------------\n");
+                                    }
+                                    colTeam++;
+                                }
                                 game += 8;
                                 defeats += 8;
                                 scored += 8;
@@ -228,6 +288,7 @@ namespace Soccer365
                     continue;
                 }
                 k++;
+                colTeam++;
             }
         }
 
