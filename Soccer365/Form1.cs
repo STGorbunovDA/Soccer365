@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,11 +17,46 @@ namespace Soccer365
 {
     public partial class Form1 : Form
     {
+        private delegate DialogResult ShowOpenFileDialogInvoker();
         public Form1()
         {
             InitializeComponent();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SearchInTxt("Команда");
+        }
+
+        private void SearchInTxt(string keyWord)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+
+            openFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            ShowOpenFileDialogInvoker invoker = new ShowOpenFileDialogInvoker(openFile.ShowDialog);
+
+            this.Invoke(invoker);
+
+            if (openFile.FileName != "")
+            {
+                string filename = openFile.FileName;
+                string str = File.ReadAllText(filename);
+
+                var kek = str.Split(new Char[] { ':', ',','\n' }).ToList();
+
+                foreach (string s in kek)
+                {
+                    if (s.Trim() != "" && Regex.IsMatch(s, keyWord))
+                    {
+                        var text = kek[kek.IndexOf(keyWord) + 1] + " " + kek[kek.IndexOf(keyWord) + 3];
+                        break;
+                    }
+                }
+            }
+
+               
+        }
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
             int o = 12;
@@ -194,6 +230,7 @@ namespace Soccer365
                 k++;
             }
         }
+
     }
 
 }
