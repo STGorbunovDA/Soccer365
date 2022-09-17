@@ -23,12 +23,11 @@ namespace Soccer365
 
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
-            //var o = 12;
-            var o = 200;
-
+            int o = 12;
+            
             IWebDriver driver = new ChromeDriver();
 
-            while (o < 700)
+            while (o < 800)
             {
                 if (o == 19) o=418;
 
@@ -46,11 +45,12 @@ namespace Soccer365
 
                         try
                         {
+                            
                             driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd}')]")).Click();
 
                             driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game.Text}')]")).Click();
-                            cmd = cmB_years_game.Text;
 
+                            cmd = cmB_years_game.Text;
                         }
                         catch
                         {
@@ -102,9 +102,7 @@ namespace Soccer365
                     continue;
                 }
                 o++;
-            }
-
-
+            }     
 
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -116,14 +114,84 @@ namespace Soccer365
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int k = 12;
             IWebDriver driver = new ChromeDriver();
-            driver.Url = $@"https://soccer365.ru/online/";
-            driver.FindElement(By.XPath($"//span[@class='tabs_item js'][contains(.,'Все игры')]")).Click();
 
-            while (true)
+            while (k < 800)
             {
-                var TeamPlay1 = $"{driver.FindElement(By.XPath($"(//div[@class='ht'])[1]")).GetAttribute("textContent")}\r\n";
-                var TeamPlay2 = $"{driver.FindElement(By.XPath($"(//div[@class='at'])[1]")).GetAttribute("textContent")}\r\n";
+                if (k == 19) k = 418;
+
+                try
+                {
+                    driver.Url = $@"https://soccer365.ru/competitions/{k}/";
+
+                    var cmd2 = "2022";
+                    var i = 0;
+                    cmB_years_game.SelectedIndex = 0;
+
+                    while (i < cmB_years_game_catch.Items.Count)
+                    {
+                        Setting.GetInstance.CheckingFileAvailability(cmB_years_game_catch.Text);
+
+                        try
+                        {
+
+                            driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd2}')]")).Click();
+
+                            driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game_catch.Text}')]")).Click();
+
+                            cmd2 = cmB_years_game_catch.Text;
+                        }
+                        catch
+                        {
+                            if (i < cmB_years_game_catch.Items.Count - 1) cmB_years_game_catch.SelectedIndex = i + 1;
+                            i++;
+                            continue;
+                        }
+
+
+                        int game = 1;
+                        int defeats = 4;
+                        int scored = 5;
+                        int conceded = 6;
+
+                        try
+                        {
+                            for (int y = 2; y < 21; y++)
+                            {
+                                var Team = $"{driver.FindElement(By.XPath($"(//a[@rel='nofollow'])[{y}]")).GetAttribute("textContent")}\r\n";// Записываем команду
+
+                                string playGame = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{game}]")).GetAttribute("textContent")}\r\n";
+
+                                string playDefeats = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{defeats}]")).GetAttribute("textContent")}\r\n";
+
+                                string goalsScored = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{scored}]")).GetAttribute("textContent")}\r\n";
+
+                                string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
+
+                                Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
+                                team.PrintTeam(cmB_years_game_catch.Text);
+                                game += 8;
+                                defeats += 8;
+                                scored += 8;
+                                conceded += 8;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                        if (i < cmB_years_game_catch.Items.Count - 1) cmB_years_game_catch.SelectedIndex = i + 1;
+                        i++;
+                    }
+                }
+                catch
+                {
+                    k++;
+                    continue;
+                }
+                k++;
             }
         }
     }
