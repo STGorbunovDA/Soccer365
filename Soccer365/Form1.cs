@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -207,8 +208,95 @@ namespace Soccer365
             cmb_Occurs_more.SelectedIndex = 2;
         }
 
-      
-       
+        private void Bnt_PlayGameToday_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+
+            openFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            ShowOpenFileDialogInvoker invoker = new ShowOpenFileDialogInvoker(openFile.ShowDialog);
+
+            this.Invoke(invoker);
+
+            if (openFile.FileName != "")
+            {
+                try
+                {
+                    string filename = openFile.FileName;
+                    string text = File.ReadAllText(filename);
+
+                    cmb_Team.Items.AddRange(File.ReadAllLines(filename, System.Text.Encoding.Default));
+                    cmb_Team.SelectedIndex = 0;
+                    lbl_colTeam.Text += " " + cmb_Team.Items.Count.ToString();
+                    if(cmb_Team.Items.Count > 0)
+                    {
+                        btn_Show_team_games_today.Visible = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Не удаётся загрузить игры");
+                }
+                
+            }
+        }
+
+        private void btn_Show_team_games_today_Click(object sender, EventArgs e)
+        {
+            IWebDriver driver2 = new ChromeDriver();
+            driver2.Url = $@"https://soccer365.ru/online/";
+            driver2.FindElement(By.XPath($"//span[@class='tabs_item js'][contains(.,'Все игры')]")).Click();
+
+            string fileName2 = $"C:\\Soccer\\Сегодня играют.txt";
+
+            if (File.Exists(fileName2))
+            {
+                try
+                {
+                    File.Delete(fileName2);
+                }
+                catch
+                {
+
+                }
+            }
+
+            var i = 0;
+            while (i < cmb_Team.Items.Count)
+            {
+                try
+                {
+                    var team = $"{driver2.FindElement(By.XPath($"//span[contains(.,'{cmb_Team.Text.Trim()}')]")).GetAttribute("textContent")}";
+
+                    var fileName = $"C:\\Soccer\\Сегодня играют.txt";
+                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                    {
+                        sw.Write($"{team}\n");
+                    }
+
+                    if (i < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = i + 1;
+                }
+                catch 
+                {
+                    if (i < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = i + 1;
+                    i++;
+                }
+
+                i++;
+            }
+            try
+            {
+                foreach (Process proc in Process.GetProcessesByName("chrome"))
+                {
+                    proc.Kill();
+                }
+            }
+            catch 
+            {
+
+            }
+            MessageBox.Show("Готовченко!");
+        }
     }
 
 }

@@ -34,6 +34,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cmb_Occurs_more = new System.Windows.Forms.ComboBox();
+            this.PlayGameToday = new System.Windows.Forms.Button();
+            this.cmb_Team = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbl_colTeam = new System.Windows.Forms.Label();
+            this.btn_Show_team_games_today = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Soccer365
@@ -79,7 +84,7 @@
             "99"});
             this.cmB_Percentage_draw.Location = new System.Drawing.Point(206, 31);
             this.cmB_Percentage_draw.Name = "cmB_Percentage_draw";
-            this.cmB_Percentage_draw.Size = new System.Drawing.Size(218, 21);
+            this.cmB_Percentage_draw.Size = new System.Drawing.Size(224, 21);
             this.cmB_Percentage_draw.TabIndex = 9;
             // 
             // label1
@@ -96,9 +101,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(206, 62);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(219, 13);
+            this.label2.Size = new System.Drawing.Size(224, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "В чемпионате не проигрывали более раз:";
+            this.label2.Text = "В чемпионатах не проигрывала более раз:";
             // 
             // cmb_Occurs_more
             // 
@@ -114,15 +119,70 @@
             "7"});
             this.cmb_Occurs_more.Location = new System.Drawing.Point(206, 78);
             this.cmb_Occurs_more.Name = "cmb_Occurs_more";
-            this.cmb_Occurs_more.Size = new System.Drawing.Size(218, 21);
+            this.cmb_Occurs_more.Size = new System.Drawing.Size(224, 21);
             this.cmb_Occurs_more.TabIndex = 12;
+            // 
+            // PlayGameToday
+            // 
+            this.PlayGameToday.Location = new System.Drawing.Point(-1, 125);
+            this.PlayGameToday.Name = "PlayGameToday";
+            this.PlayGameToday.Size = new System.Drawing.Size(201, 87);
+            this.PlayGameToday.TabIndex = 13;
+            this.PlayGameToday.Text = "Загрузи команды";
+            this.PlayGameToday.UseVisualStyleBackColor = true;
+            this.PlayGameToday.Click += new System.EventHandler(this.Bnt_PlayGameToday_Click);
+            // 
+            // cmb_Team
+            // 
+            this.cmb_Team.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cmb_Team.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_Team.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.cmb_Team.FormattingEnabled = true;
+            this.cmb_Team.Location = new System.Drawing.Point(206, 141);
+            this.cmb_Team.Name = "cmb_Team";
+            this.cmb_Team.Size = new System.Drawing.Size(224, 21);
+            this.cmb_Team.TabIndex = 14;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(206, 125);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(100, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Загрузи команды:";
+            // 
+            // lbl_colTeam
+            // 
+            this.lbl_colTeam.AutoSize = true;
+            this.lbl_colTeam.Location = new System.Drawing.Point(206, 165);
+            this.lbl_colTeam.Name = "lbl_colTeam";
+            this.lbl_colTeam.Size = new System.Drawing.Size(43, 13);
+            this.lbl_colTeam.TabIndex = 16;
+            this.lbl_colTeam.Text = "кол-во:";
+            // 
+            // btn_Show_team_games_today
+            // 
+            this.btn_Show_team_games_today.Location = new System.Drawing.Point(315, 168);
+            this.btn_Show_team_games_today.Name = "btn_Show_team_games_today";
+            this.btn_Show_team_games_today.Size = new System.Drawing.Size(115, 41);
+            this.btn_Show_team_games_today.TabIndex = 17;
+            this.btn_Show_team_games_today.Text = "Показать игры команд сегодня:";
+            this.btn_Show_team_games_today.UseVisualStyleBackColor = true;
+            this.btn_Show_team_games_today.Visible = false;
+            this.btn_Show_team_games_today.Click += new System.EventHandler(this.btn_Show_team_games_today_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.ClientSize = new System.Drawing.Size(436, 133);
+            this.ClientSize = new System.Drawing.Size(437, 222);
+            this.Controls.Add(this.btn_Show_team_games_today);
+            this.Controls.Add(this.lbl_colTeam);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cmb_Team);
+            this.Controls.Add(this.PlayGameToday);
             this.Controls.Add(this.cmb_Occurs_more);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -145,6 +205,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmb_Occurs_more;
+        private System.Windows.Forms.Button PlayGameToday;
+        private System.Windows.Forms.ComboBox cmb_Team;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbl_colTeam;
+        private System.Windows.Forms.Button btn_Show_team_games_today;
     }
 }
 
