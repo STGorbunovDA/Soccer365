@@ -16,110 +16,6 @@ namespace Soccer365
         {
             InitializeComponent();
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            SearchInTxt();
-        }
-
-        private void SearchInTxt()
-        {
-            OpenFileDialog openFile = new OpenFileDialog();
-
-            openFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-
-            ShowOpenFileDialogInvoker invoker = new ShowOpenFileDialogInvoker(openFile.ShowDialog);
-
-            this.Invoke(invoker);
-
-            if (openFile.FileName != "")
-            {
-                string filename = openFile.FileName;
-                string str = File.ReadAllText(filename);
-
-
-                int counter = 0;
-
-                var sSearch = "";
-                var i = 0;
-                var countSearchSlovo = 1;//для поиска по ключевому слову команды
-
-                var kek = str.Split(new Char[] { ':', ',', '\n' }).ToList();
-
-                while (i < kek.Count)
-                {
-                    string keyWord = $"Команда{countSearchSlovo}";
-
-                    foreach (string s in kek)
-                    {
-                        if (s.Trim() != "" && Regex.IsMatch(s, keyWord))
-                        {
-                            sSearch = kek[kek.IndexOf(keyWord) + 1];
-                            break;
-                        }
-                    }
-                    if (sSearch != "")
-                    {
-                        foreach (var word in kek)
-                        {
-                            if (sSearch == word)
-                                counter++;
-                        }
-
-                        if (counter > 5)
-                        {
-                            if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\"))
-                            {
-                                Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\");
-                            }
-
-                            var fileName = $"C:\\Soccer\\КомандаТочно\\команды.txt";
-                            using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
-                            {
-                                sw.Write($"Команда: {sSearch}\n");
-                            }
-
-                        }
-                        countSearchSlovo++;
-                        counter = 0;
-                        i++;
-                        sSearch = "";
-                    }
-                    else break;
-                }
-                MessageBox.Show("Готовченко");
-            }
-        }
-
-        private void RemoveRepetitions_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFile = new OpenFileDialog();
-
-            openFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-
-            ShowOpenFileDialogInvoker invoker = new ShowOpenFileDialogInvoker(openFile.ShowDialog);
-
-            this.Invoke(invoker);
-
-            if (openFile.FileName != "")
-            {
-                string filename = openFile.FileName;
-                string str = File.ReadAllText(filename);
-
-                var dest = Setting.GetInstance.WordsDistinct(str);
-
-                if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\Без повторов"))
-                {
-                    Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\Без повторов");
-                }
-
-                var fileName = $"C:\\Soccer\\КомандаТочно\\Без повторов\\командыТочно.txt";
-                using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
-                {
-                    sw.Write($"{dest}");
-                }
-            }
-        }
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
             int o = 12;
@@ -180,9 +76,9 @@ namespace Soccer365
 
                                 Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
 
-                                if (team.PercentWin > 79)
+                                if (team.PercentWin > Convert.ToInt32(cmB_Percentage_draw.Text))
                                 {
-                                    var fileName = $"C:\\Soccer\\Команды2022.txt";
+                                    var fileName = $"C:\\Soccer\\КомандаТочно\\Команды процент побед и ничей более {cmB_Percentage_draw.Text}.txt";
                                     using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
                                     {
                                         sw.Write($"Команда{colTeam}: {team.Name.Trim()},\nПроцент побед: {team.PercentWin},\nЗабивают за матч: {team.GoalsScoredPlay},\nПропускают за матч: {team.GoalsСoncededPlay}\n-------------------\n");
@@ -210,13 +106,105 @@ namespace Soccer365
                     continue;
                 }
                 o++;
+            }
+            MessageBox.Show("Готовченко_1");
+            try
+            {
+                string filename = $"C:\\Soccer\\КомандаТочно\\Команды процент побед и ничей более {cmB_Percentage_draw.Text}.txt";
+                string str = File.ReadAllText(filename);
+
+                int counter = 0;
+
+                var sSearch = "";
+                var i = 0;
+                var countSearchSlovo = 1;//для поиска по ключевому слову команды
+
+                var kek = str.Split(new Char[] { ':', ',', '\n' }).ToList();
+
+                while (i < kek.Count)
+                {
+                    string keyWord = $"Команда{countSearchSlovo}";
+
+                    foreach (string s in kek)
+                    {
+                        if (s.Trim() != "" && Regex.IsMatch(s, keyWord))
+                        {
+                            sSearch = kek[kek.IndexOf(keyWord) + 1];
+                            break;
+                        }
+                    }
+                    if (sSearch != "")
+                    {
+                        foreach (var word in kek)
+                        {
+                            if (sSearch == word)
+                                counter++;
+                        }
+
+                        if (counter > Convert.ToInt32(cmb_Occurs_more.Text))
+                        {
+                            if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\"))
+                            {
+                                Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\");
+                            }
+
+                            var fileName = $"C:\\Soccer\\КомандаТочно\\команды в чемпионате не проигрывали более {cmb_Occurs_more.Text} раз.txt";
+                            using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                            {
+                                sw.Write($"{sSearch}\n");
+                            }
+
+                        }
+                        countSearchSlovo++;
+                        counter = 0;
+                        i++;
+                        sSearch = "";
+                    }
+                    else break;
+                }
+                MessageBox.Show("Готовченко_2");
+
+                try
+                {
+                    string filename2 = $"C:\\Soccer\\КомандаТочно\\команды в чемпионате не проигрывали более {cmb_Occurs_more.Text} раз.txt";
+                    string str2 = File.ReadAllText(filename2);
+
+                    var dest = Setting.GetInstance.WordsDistinct(str2);
+
+                    if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\Без повторов"))
+                    {
+                        Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\Без повторов");
+                    }
+
+                    var fileName = $"C:\\Soccer\\Команды.txt";
+                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                    {
+                        sw.Write($"{dest}");
+                    }
+                    MessageBox.Show("Готовченко_3");
+                    
+                    string dirName = $"C:\\Soccer\\КомандаТочно";
+                    if (Directory.Exists(dirName))
+                    {
+                        Directory.Delete(dirName, true);
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Отсутсвует файл!2");
+                }
 
             }
-
+            catch (Exception)
+            {
+                MessageBox.Show("Отсутсвует файл!1");
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             cmB_years_game.SelectedIndex = 0;
+            cmB_Percentage_draw.SelectedIndex = 1;
+            cmb_Occurs_more.SelectedIndex = 2;
         }
 
       

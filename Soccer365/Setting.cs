@@ -23,9 +23,9 @@ namespace Soccer365
         }
         internal void CheckingFileAvailability(string cmB_years_game)
         {
-            if (!Directory.Exists($"C:\\Soccer\\"))
+            if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\"))
             {
-                Directory.CreateDirectory($"C:\\Soccer\\");
+                Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\");
             }
         }
 
