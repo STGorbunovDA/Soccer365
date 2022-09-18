@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Soccer365
 {
@@ -27,19 +27,51 @@ namespace Soccer365
             {
                 Directory.CreateDirectory($"C:\\Soccer\\");
             }
+        }
 
-            //var fileName = $"C:\\Soccer\\{cmB_years_game.Replace('/', '.')}.txt";
-            //if (!Directory.Exists(fileName))
-            //{
-            //    try
-            //    {
-            //        File.Delete(fileName);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine("The deletion failed: {0}", e.Message);
-            //    }
-            //}
+        internal string WordsDistinct(string src)
+        {
+            var split = src.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder();
+            var buffer = new int[split.Length];
+            var index = 0;
+
+            foreach (var item in split)
+            {
+                var word = "";
+                var puctuationIndex = FirstIndexOfPunctuation(item);
+                if (puctuationIndex != -1)
+                {
+                    word = item.Substring(0, puctuationIndex);
+                }
+                else
+                {
+                    word = item;
+                }
+
+                var hash = word.ToLower().GetHashCode();
+                if (Array.IndexOf(buffer, hash) == -1)
+                {
+                    buffer[index++] = hash;
+                    sb.Append(item);
+                    sb.Append(" ");
+                }
+
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        int FirstIndexOfPunctuation(string src)
+        {
+            for (int i = 0; i < src.Length; i++)
+            {
+                if (char.IsPunctuation(src[i]))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
     }

@@ -1,16 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Soccer365
@@ -72,7 +66,7 @@ namespace Soccer365
                                 counter++;
                         }
 
-                        if (counter > 4)
+                        if (counter > 5)
                         {
                             if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\"))
                             {
@@ -94,10 +88,37 @@ namespace Soccer365
                     else break;
                 }
                 MessageBox.Show("Готовченко");
-
             }
+        }
 
+        private void RemoveRepetitions_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
 
+            openFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            ShowOpenFileDialogInvoker invoker = new ShowOpenFileDialogInvoker(openFile.ShowDialog);
+
+            this.Invoke(invoker);
+
+            if (openFile.FileName != "")
+            {
+                string filename = openFile.FileName;
+                string str = File.ReadAllText(filename);
+
+                var dest = Setting.GetInstance.WordsDistinct(str);
+
+                if (!Directory.Exists($"C:\\Soccer\\КомандаТочно\\Без повторов"))
+                {
+                    Directory.CreateDirectory($"C:\\Soccer\\КомандаТочно\\Без повторов");
+                }
+
+                var fileName = $"C:\\Soccer\\КомандаТочно\\Без повторов\\командыТочно.txt";
+                using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                {
+                    sw.Write($"{dest}");
+                }
+            }
         }
         void Btn_Soccer365_Click(object sender, EventArgs e)
         {
@@ -113,7 +134,7 @@ namespace Soccer365
                 {
                     driver.Url = $@"https://soccer365.ru/competitions/{o}/";
 
-                    var cmd = "2022/2023";
+                    var cmd = "2022";
                     var i = 0;
                     cmB_years_game.SelectedIndex = 0;
 
@@ -145,7 +166,7 @@ namespace Soccer365
 
                         try
                         {
-                            for (int y = 2; y < 21; y++)
+                            for (int y = 1; y < 21; y++)
                             {
                                 var Team = $"{driver.FindElement(By.XPath($"(//a[@rel='nofollow'])[{y}]")).GetAttribute("textContent")}\r\n";// Записываем команду
 
@@ -159,9 +180,9 @@ namespace Soccer365
 
                                 Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
 
-                                if (team.PercentWin > 80)
+                                if (team.PercentWin > 79)
                                 {
-                                    var fileName = $"C:\\Soccer\\Команды.txt";
+                                    var fileName = $"C:\\Soccer\\Команды2022.txt";
                                     using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
                                     {
                                         sw.Write($"Команда{colTeam}: {team.Name.Trim()},\nПроцент побед: {team.PercentWin},\nЗабивают за матч: {team.GoalsScoredPlay},\nПропускают за матч: {team.GoalsСoncededPlay}\n-------------------\n");
@@ -196,102 +217,10 @@ namespace Soccer365
         private void Form1_Load(object sender, EventArgs e)
         {
             cmB_years_game.SelectedIndex = 0;
-            cmB_years_game_catch.SelectedIndex = 0;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            int colTeam = 0;
-            int k = 12;
-            IWebDriver driver = new ChromeDriver();
-
-            while (k < 800)
-            {
-                if (k == 19) k = 418;
-
-                try
-                {
-                    driver.Url = $@"https://soccer365.ru/competitions/{k}/";
-
-                    var cmd2 = "2022";
-                    var i = 0;
-                    cmB_years_game.SelectedIndex = 0;
-
-                    while (i < cmB_years_game_catch.Items.Count)
-                    {
-                        Setting.GetInstance.CheckingFileAvailability(cmB_years_game_catch.Text);
-
-                        try
-                        {
-
-                            driver.FindElement(By.XPath($"//span[@class='selectbox-label'][contains(.,'{cmd2}')]")).Click();
-
-                            driver.FindElement(By.XPath($"//a[contains(.,'{cmB_years_game_catch.Text}')]")).Click();
-
-                            cmd2 = cmB_years_game_catch.Text;
-                        }
-                        catch
-                        {
-                            if (i < cmB_years_game_catch.Items.Count - 1) cmB_years_game_catch.SelectedIndex = i + 1;
-                            i++;
-                            continue;
-                        }
-
-
-                        int game = 1;
-                        int defeats = 4;
-                        int scored = 5;
-                        int conceded = 6;
-
-                        try
-                        {
-                            for (int y = 2; y < 21; y++)
-                            {
-                                var Team = $"{driver.FindElement(By.XPath($"(//a[@rel='nofollow'])[{y}]")).GetAttribute("textContent")}\r\n";// Записываем команду
-
-                                string playGame = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{game}]")).GetAttribute("textContent")}\r\n";
-
-                                string playDefeats = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{defeats}]")).GetAttribute("textContent")}\r\n";
-
-                                string goalsScored = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{scored}]")).GetAttribute("textContent")}\r\n";
-
-                                string goalsСonceded = $"{driver.FindElement(By.XPath($"(//td[@class='ctr'])[{conceded}]")).GetAttribute("textContent")}\r\n";
-
-                                Team team = new Team(Team, playGame, playDefeats, goalsScored, goalsСonceded);
-                                if (team.PercentWin > 80)
-                                {
-                                    var fileName = $"C:\\Soccer\\Команды.txt";
-                                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
-                                    {
-                                        sw.Write($"Команда{colTeam}: {team.Name.Trim()},\nПроцент побед: {team.PercentWin},\nЗабивают за матч: {team.GoalsScoredPlay},\nПропускают за матч: {team.GoalsСoncededPlay}\n-------------------\n");
-                                    }
-                                    colTeam++;
-                                }
-                                game += 8;
-                                defeats += 8;
-                                scored += 8;
-                                conceded += 8;
-                            }
-                        }
-                        catch
-                        {
-
-                        }
-
-                        if (i < cmB_years_game_catch.Items.Count - 1) cmB_years_game_catch.SelectedIndex = i + 1;
-                        i++;
-                    }
-                }
-                catch
-                {
-                    k++;
-                    continue;
-                }
-                k++;
-                colTeam++;
-            }
-        }
-
+      
+       
     }
 
 }
