@@ -183,7 +183,7 @@ namespace Soccer365
                         sw.Write($"{dest}");
                     }
                     MessageBox.Show("Готовченко_3");
-                    
+
                     string dirName = $"C:\\Soccer\\КомандаТочно";
                     if (Directory.Exists(dirName))
                     {
@@ -228,7 +228,7 @@ namespace Soccer365
                     cmb_Team.Items.AddRange(File.ReadAllLines(filename, System.Text.Encoding.Default));
                     cmb_Team.SelectedIndex = 0;
                     lbl_colTeam.Text += " " + cmb_Team.Items.Count.ToString();
-                    if(cmb_Team.Items.Count > 0)
+                    if (cmb_Team.Items.Count > 0)
                     {
                         btn_Show_team_games_today.Visible = true;
                     }
@@ -237,7 +237,7 @@ namespace Soccer365
                 {
                     MessageBox.Show("Не удаётся загрузить игры");
                 }
-                
+
             }
         }
 
@@ -262,21 +262,52 @@ namespace Soccer365
             }
 
             var i = 0;
+            string win = "";
+            string draw = "";
+            string defeat = "";
+
             while (i < cmb_Team.Items.Count)
             {
                 try
                 {
-                    var team = $"{driver2.FindElement(By.XPath($"//span[contains(.,'{cmb_Team.Text.Trim()}')]")).GetAttribute("textContent")}";
+                    var teamSearch = $"{driver2.FindElement(By.XPath($"//span[contains(.,'{cmb_Team.Text.Trim()}')]")).GetAttribute("textContent")}";
+                    #region метод получения кефов
+                    //try
+                    //{
+                    //    driver2.FindElement(By.XPath($"//div[@class='at'][contains(.,'{cmb_Team.Text}					-')]")).Click();//не находит команду
+                    //    driver2.FindElement(By.XPath($"(//a[contains(.,'Ставки')])[1]")).Click();  
 
+                    //    win = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[10]")).GetAttribute("textContent")}";
+                    //    draw = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[11]")).GetAttribute("textContent")}";
+                    //    defeat = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[12]")).GetAttribute("textContent")}";
+
+                    //}
+                    //catch
+                    //{
+                    //    driver2.FindElement(By.XPath($"//div[@class='ht'][contains(.,'{cmb_Team.Text}-')]")).Click();//не находит команду
+                    //    driver2.FindElement(By.XPath($"(//a[contains(.,'Ставки')])[1]")).Click();
+
+                    //    win = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[10]")).GetAttribute("textContent")}";
+                    //    draw = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[11]")).GetAttribute("textContent")}";
+                    //    defeat = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[12]")).GetAttribute("textContent")}";
+                    //}
+                    #endregion
                     var fileName = $"C:\\Soccer\\Сегодня играют.txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
                     {
-                        sw.Write($"{team}\n");
+                        sw.Write($"{teamSearch}\n");
+                        //sw.Write($"{teamSearch}\nПобеда1 кеф:{win}\nНичья кеф:{draw}\nПобеда2 кеф:{defeat}\n-----------------------\n");
                     }
-
+                    win = "";
+                    draw = "";
+                    defeat = "";
                     if (i < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = i + 1;
+
+                    //driver2.FindElement(By.XPath($"//a[contains(.,'Футбол онлайн')]")).Click();
+                    //driver2.FindElement(By.XPath($"//span[@class='tabs_item js'][contains(.,'Все игры')]")).Click();
+
                 }
-                catch 
+                catch
                 {
                     if (i < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = i + 1;
                     i++;
@@ -291,7 +322,7 @@ namespace Soccer365
                     proc.Kill();
                 }
             }
-            catch 
+            catch
             {
 
             }
