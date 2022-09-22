@@ -170,7 +170,7 @@
             this.btn_Show_team_games_today.Text = "Показать игры команд сегодня:";
             this.btn_Show_team_games_today.UseVisualStyleBackColor = true;
             this.btn_Show_team_games_today.Visible = false;
-            this.btn_Show_team_games_today.Click += new System.EventHandler(this.btn_Show_team_games_today_Click);
+            this.btn_Show_team_games_today.Click += new System.EventHandler(this.Btn_Show_team_games_today_Click);
             // 
             // Form1
             // 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Soccer365
@@ -241,25 +242,11 @@ namespace Soccer365
             }
         }
 
-        private void btn_Show_team_games_today_Click(object sender, EventArgs e)
+        private async void Btn_Show_team_games_today_Click(object sender, EventArgs e)
         {
             IWebDriver driver2 = new ChromeDriver();
             driver2.Url = $@"https://soccer365.ru/online/";
             driver2.FindElement(By.XPath($"//span[@class='tabs_item js'][contains(.,'Все игры')]")).Click();
-
-            string fileName2 = $"C:\\Soccer\\Сегодня играют.txt";
-
-            if (File.Exists(fileName2))
-            {
-                try
-                {
-                    File.Delete(fileName2);
-                }
-                catch
-                {
-
-                }
-            }
 
             var i = 0;
             string win = "";
@@ -270,6 +257,8 @@ namespace Soccer365
             {
                 try
                 {
+                    DateTime today1 = DateTime.Today;
+                    var today = today1.ToString("dd.MM.yyyy");
                     var teamSearch = $"{driver2.FindElement(By.XPath($"//span[contains(.,'{cmb_Team.Text.Trim()}')]")).GetAttribute("textContent")}";
                     #region метод получения кефов
                     //try
@@ -292,7 +281,7 @@ namespace Soccer365
                     //    defeat = $"{driver2.FindElement(By.XPath($"(//a[contains(@rel,'nofollow')])[12]")).GetAttribute("textContent")}";
                     //}
                     #endregion
-                    var fileName = $"C:\\Soccer\\Сегодня играют.txt";
+                    var fileName = $"C:\\Soccer\\Сегодня играют {today}.txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
                     {
                         sw.Write($"{teamSearch}\n");
@@ -315,6 +304,43 @@ namespace Soccer365
 
                 i++;
             }
+            DateTime tomorrow1 = DateTime.Today.AddDays(1);
+            var tomorrow = tomorrow1.ToString("dd");
+            
+            await Task.Delay(2000);
+            driver2.FindElement(By.XPath($"//span[@class='icon16']")).Click();
+            driver2.FindElement(By.XPath($"//span[@class='flatpickr-day '][contains(.,'{tomorrow}')]")).Click();
+            
+            var zp = 0;
+
+            while (zp < cmb_Team.Items.Count)
+            {
+                try
+                {
+                    DateTime tomorrow2 = DateTime.Today.AddDays(1);
+                    var tomorrow3 = tomorrow2.ToString("dd.MM.yyyy");
+                    var teamSearch = $"{driver2.FindElement(By.XPath($"//span[contains(.,'{cmb_Team.Text.Trim()}')]")).GetAttribute("textContent")}";
+                   
+                    var fileName = $"C:\\Soccer\\Завтра играют {tomorrow3}.txt";
+                    using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.Unicode))
+                    {
+                        sw.Write($"{teamSearch}\n");
+                    }
+                    win = "";
+                    draw = "";
+                    defeat = "";
+                    if (zp < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = zp + 1;
+
+                }
+                catch
+                {
+                    if (zp < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = zp + 1;
+                    zp++;
+                }
+
+                zp++;
+            }
+
             try
             {
                 foreach (Process proc in Process.GetProcessesByName("chrome"))
@@ -326,8 +352,21 @@ namespace Soccer365
             {
 
             }
+            try
+            {
+                foreach (Process proc in Process.GetProcessesByName("chromedriver"))
+                {
+                    proc.Kill();
+                }
+            }
+            catch
+            {
+
+            }
             MessageBox.Show("Готовченко!");
         }
+
+        
     }
 
 }
