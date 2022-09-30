@@ -305,8 +305,18 @@ namespace Soccer365
                 i++;
             }
             DateTime tomorrow1 = DateTime.Today.AddDays(1);
+
             var tomorrow = tomorrow1.ToString("dd");
-            
+
+            try
+            {
+                var re = new Regex("0");
+                tomorrow = re.Replace(tomorrow, "");
+            }
+            catch
+            {
+
+            }  
             await Task.Delay(2000);
             driver2.FindElement(By.XPath($"//span[@class='icon16']")).Click();
             driver2.FindElement(By.XPath($"//span[@class='flatpickr-day '][contains(.,'{tomorrow}')]")).Click();
@@ -329,12 +339,19 @@ namespace Soccer365
                     win = "";
                     draw = "";
                     defeat = "";
-                    if (zp < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = zp + 1;
+
+                    if (zp < cmb_Team.Items.Count - 1)
+                    {
+                        cmb_Team.SelectedIndex = zp + 1;
+                    }
 
                 }
                 catch
                 {
-                    if (zp < cmb_Team.Items.Count - 1) cmb_Team.SelectedIndex = zp + 1;
+                    if (zp < cmb_Team.Items.Count - 1)
+                    {
+                        cmb_Team.SelectedIndex = zp + 1;
+                    }
                     zp++;
                 }
 
