@@ -39,15 +39,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lbl_colTeam = new System.Windows.Forms.Label();
             this.btn_Show_team_games_today = new System.Windows.Forms.Button();
+            this.btn_Soccer365_2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Soccer365
             // 
             this.btn_Soccer365.Location = new System.Drawing.Point(-1, 12);
             this.btn_Soccer365.Name = "btn_Soccer365";
-            this.btn_Soccer365.Size = new System.Drawing.Size(201, 87);
+            this.btn_Soccer365.Size = new System.Drawing.Size(201, 40);
             this.btn_Soccer365.TabIndex = 0;
-            this.btn_Soccer365.Text = "Парсить";
+            this.btn_Soccer365.Text = "Парсить команды фора";
             this.btn_Soccer365.UseVisualStyleBackColor = true;
             this.btn_Soccer365.Click += new System.EventHandler(this.Btn_Soccer365_Click);
             // 
@@ -84,7 +85,7 @@
             "99"});
             this.cmB_Percentage_draw.Location = new System.Drawing.Point(206, 31);
             this.cmB_Percentage_draw.Name = "cmB_Percentage_draw";
-            this.cmB_Percentage_draw.Size = new System.Drawing.Size(224, 21);
+            this.cmB_Percentage_draw.Size = new System.Drawing.Size(289, 21);
             this.cmB_Percentage_draw.TabIndex = 9;
             // 
             // label1
@@ -101,9 +102,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(206, 62);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(224, 13);
+            this.label2.Size = new System.Drawing.Size(289, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "В чемпионатах не проигрывала более раз:";
+            this.label2.Text = "В чемпионатах не проигрывала и тотал 2.5Б более раз:";
             // 
             // cmb_Occurs_more
             // 
@@ -119,7 +120,7 @@
             "7"});
             this.cmb_Occurs_more.Location = new System.Drawing.Point(206, 78);
             this.cmb_Occurs_more.Name = "cmb_Occurs_more";
-            this.cmb_Occurs_more.Size = new System.Drawing.Size(224, 21);
+            this.cmb_Occurs_more.Size = new System.Drawing.Size(289, 21);
             this.cmb_Occurs_more.TabIndex = 12;
             // 
             // PlayGameToday
@@ -140,7 +141,7 @@
             this.cmb_Team.FormattingEnabled = true;
             this.cmb_Team.Location = new System.Drawing.Point(206, 141);
             this.cmb_Team.Name = "cmb_Team";
-            this.cmb_Team.Size = new System.Drawing.Size(224, 21);
+            this.cmb_Team.Size = new System.Drawing.Size(289, 21);
             this.cmb_Team.TabIndex = 14;
             // 
             // label3
@@ -163,7 +164,7 @@
             // 
             // btn_Show_team_games_today
             // 
-            this.btn_Show_team_games_today.Location = new System.Drawing.Point(315, 168);
+            this.btn_Show_team_games_today.Location = new System.Drawing.Point(380, 171);
             this.btn_Show_team_games_today.Name = "btn_Show_team_games_today";
             this.btn_Show_team_games_today.Size = new System.Drawing.Size(115, 41);
             this.btn_Show_team_games_today.TabIndex = 17;
@@ -172,12 +173,23 @@
             this.btn_Show_team_games_today.Visible = false;
             this.btn_Show_team_games_today.Click += new System.EventHandler(this.Btn_Show_team_games_today_Click);
             // 
+            // btn_Soccer365_2
+            // 
+            this.btn_Soccer365_2.Location = new System.Drawing.Point(-1, 59);
+            this.btn_Soccer365_2.Name = "btn_Soccer365_2";
+            this.btn_Soccer365_2.Size = new System.Drawing.Size(201, 40);
+            this.btn_Soccer365_2.TabIndex = 18;
+            this.btn_Soccer365_2.Text = "Парсить команды голы";
+            this.btn_Soccer365_2.UseVisualStyleBackColor = true;
+            this.btn_Soccer365_2.Click += new System.EventHandler(this.Btn_Soccer365_2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.ClientSize = new System.Drawing.Size(437, 222);
+            this.ClientSize = new System.Drawing.Size(514, 224);
+            this.Controls.Add(this.btn_Soccer365_2);
             this.Controls.Add(this.btn_Show_team_games_today);
             this.Controls.Add(this.lbl_colTeam);
             this.Controls.Add(this.label3);
@@ -210,6 +222,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbl_colTeam;
         private System.Windows.Forms.Button btn_Show_team_games_today;
+        private System.Windows.Forms.Button btn_Soccer365_2;
     }
 }
 

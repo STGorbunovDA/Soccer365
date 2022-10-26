@@ -17,6 +17,8 @@ namespace Soccer365
 
         public double PercentWin { get; set; } // процент выйгрыша
 
+        public double Total { get; set; } // процент выйгрыша
+
         public double GoalsScoredPlay { get; set; } // кол-во голов забито
 
         public double GoalsСoncededPlay { get; set; } // кол-во голов пропущено
@@ -26,9 +28,10 @@ namespace Soccer365
         {
             Name = name;
             PlayGame = playGame;
-            PercentWin = (100 - (Convert.ToDouble(playDefeats) / Convert.ToDouble(playGame)) * 100);
+            //PercentWin = (100 - (Convert.ToDouble(playDefeats) / Convert.ToDouble(playGame)) * 100);
             GoalsScoredPlay = Convert.ToDouble(goalsScored) / Convert.ToDouble(playGame);
             GoalsСoncededPlay = Convert.ToDouble(goalsСonceded) / Convert.ToDouble(playGame);
+            Total = (Convert.ToDouble(goalsScored) + Convert.ToDouble(playGame)) / Convert.ToDouble(playGame);
         }   
     }
 }
